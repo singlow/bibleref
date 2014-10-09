@@ -70,6 +70,7 @@ patterns = {
 }
 
 normalizeRef = (t)->
+  t = t.replace("&nbsp;", " ")
   t = t.replace(RegExp(pat+"\\.?\\b"), name) for name, pat of patterns
   t = t.replace(/;\s?$/, '')
   return t
