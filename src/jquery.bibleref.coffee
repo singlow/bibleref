@@ -70,13 +70,12 @@ patterns = {
 }
 
 normalizeRef = (t)->
-  t = t.replace(/&nbsp;/g, " ")
   t = t.replace(RegExp(pat+"\\.?\\b"), name) for name, pat of patterns
   t = t.replace(/;\s?$/, '')
   return t
 
 allBooks = '(' + (pattern for book, pattern of patterns).join('|') + ')'
-allBooksRegEx = RegExp('('+allBooks+'\\.? ?([\\d-]+(:?([0-9]+(, ?[0-9]+)*)+)(; ?)?)+);?', 'gi')
+allBooksRegEx = RegExp('('+allBooks+'\\.?\\s?([\\d-]+(:?([0-9]+(, ?[0-9]+)*)+)(; ?)?)+);?', 'gi')
 
 replacement = (match, p1, p2, p3)->
   stdname = normalizeRef(match)
