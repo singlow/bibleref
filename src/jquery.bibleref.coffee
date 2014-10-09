@@ -11,10 +11,10 @@ patterns = {
   "Ruth": "Ru(th?)?"
   "1 Samuel": "(1(st)|I) ?Sa(m(uel)?)?"
   "2 Samuel": "(2(nd)|II) ?Sa(m(uel)?)?"
-  "1 Kings": "(1(st)|I)? ?Ki(ngs)?"
-  "2 Kings": "(2(nd)|II)? ?Ki(ngs)?"
-  "1 Chronicles": "(1(st)?|I) ?Chr(on(icles)?)?"
-  "2 Chronicles": "(2(nd)?|II) ?Chr(on(icles)?)?"
+  "1 Kings": "(1(st)|I)? ?Ki?(ngs)?"
+  "2 Kings": "(2(nd)|II)? ?Ki?(ngs)?"
+  "1 Chronicles": "(1(st)?|I) ?Chr?(on(icles)?)?"
+  "2 Chronicles": "(2(nd)?|II) ?Chr?(on(icles)?)?"
   "Ezra": "Ez(ra)?"
   "Nehemiah": "Ne(h(emiah)?)?"
   "Esther": "Es(t(her)?)?"
@@ -71,56 +71,20 @@ patterns = {
 
 normalizeRef = (t)->
   t = t.replace(RegExp(pat+"\\.?\\b"), name) for name, pat of patterns
+  t = t.replace(/;\s?$/, '')
   return t
 
 allBooks = '(' + (pattern for book, pattern of patterns).join('|') + ')'
-allBooksRegEx = RegExp('('+allBooks+'\.? [0-9-]{1,5}([0-9 -:;,]+[0-9])?)', 'gi')
+allBooksRegEx = RegExp('('+allBooks+'\\.? ?([\\d-]+(:?([0-9]+(, ?[0-9]+)*)+)(; ?)?)+);?', 'gi')
 
-replacement = (match)->
+replacement = (match, p1, p2, p3)->
   stdname = normalizeRef(match)
-  return "<a href=\"http://www.biblegateway.com/passage/?search=#{stdname}&version=nasb\" data-bibleref=\"#{stdname}\">#{match}</a>"
+  console.log match
+  return "<a target=\"_blank\" href=\"http://www.biblegateway.com/passage/?search=#{stdname}&version=nasb&interface=print\" data-bibleref=\"#{stdname}\">#{match}</a>"
 
 $(document).ready ->
 
   $("p,li,dd,dt,td,q,blockquote").html (index, html)->
     return html.replace(allBooksRegEx, replacement)
 
-  $('body').on 'click blur', 'a[data-bibleref]', (e)->
-    e.preventDefault()
-    that = this
-
-    $('a[data-bibleref][aria-describedby]').not(e.target).popover('hide')
-
-    return if $(this).data('bibletext')
-    
-    $(that).css("cursor", "progress")
-    $.ajax
-      url:'http://getbible.net/json'
-      dataType: 'jsonp'
-      jsonp: 'getbible'
-      data: 'v=nasb&p='+$(this).data('bibleref')
-    .then (data)->
-      html = ''
-      if data.type is 'chapter'
-        texts = [data]
-      else if data.book?
-        texts = data.book
-      if texts?
-        for book in texts
-          html += '<h3>'+book.book_name+' '+book.chapter_nr+'</h3>'
-          for own key, verse of book.chapter
-            html += '<p><b>'+key+'</b> ' + verse.verse + '</p>'
-        $(that).data("bibletext", html)
-        $(that).popover
-          html: true
-          content: html
-          placement: 'auto'
-          trigger: 'focus click'
-        .popover('show')
-      else
-        window.location = ($(that).attr('href'))
-    .fail ->
-      window.location = ($(that).attr('href'))
-    .always ->
-      $(that).css("cursor", "pointer")
 
