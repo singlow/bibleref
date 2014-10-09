@@ -69,15 +69,15 @@ patterns = {
   "Revelation": "Re(v(elation)?)?"
 }
 
-normalizeBookName = (t)->
+normalizeRef = (t)->
   t = t.replace(RegExp(pat+"\\.?\\b"), name) for name, pat of patterns
   return t
 
 allBooks = '(' + (pattern for book, pattern of patterns).join('|') + ')'
-allBooksRegEx = RegExp('('+allBooks+'\.? [0-9]{1,3}([0-9 -:;,]+[0-9])?)', 'gi')
+allBooksRegEx = RegExp('('+allBooks+'\.? [0-9-]{1,5}([0-9 -:;,]+[0-9])?)', 'gi')
 
 replacement = (match)->
-  stdname = normalizeBookName(match)
+  stdname = normalizeRef(match)
   return "<a href=\"http://www.biblegateway.com/passage/?search=#{stdname}&version=nasb\" data-bibleref=\"#{stdname}\">#{match}</a>"
 
 $(document).ready ->
@@ -101,8 +101,12 @@ $(document).ready ->
       data: 'v=nasb&p='+$(this).data('bibleref')
     .then (data)->
       html = ''
-      if data.book?
-        for book in data.book
+      if data.type is 'chapter'
+        texts = [data]
+      else if data.book?
+        texts = data.book
+      if texts?
+        for book in texts
           html += '<h3>'+book.book_name+' '+book.chapter_nr+'</h3>'
           for own key, verse of book.chapter
             html += '<p><b>'+key+'</b> ' + verse.verse + '</p>'
@@ -114,25 +118,9 @@ $(document).ready ->
           trigger: 'focus click'
         .popover('show')
       else
-        html = "<div class='alert alert-warning'>Could not retrieve bible text.</div>"
-        $(that).data("bibletext", html)
-        $(that).popover
-          html: true
-          title: 'Error'
-          content: html
-          placement: 'auto'
-          trigger: 'focus click'
-        .popover('show')
+        window.open($(that).attr('href'))
     .fail ->
-      html = "<div class='alert alert-warning'>Could not retrieve bible text.</div>"
-      $(that).data("bibletext", html)
-      $(that).popover
-        html: true
-        title: 'Error'
-        content: html
-        placement: 'auto'
-        trigger: 'focus click'
-      .popover('show')
+      window.open($(that).attr('href'))
     .always ->
       $(that).css("cursor", "pointer")
 
