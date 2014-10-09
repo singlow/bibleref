@@ -118,9 +118,9 @@ $(document).ready ->
           trigger: 'focus click'
         .popover('show')
       else
-        window.open($(that).attr('href'))
+        window.location = ($(that).attr('href'))
     .fail ->
-      window.open($(that).attr('href'))
+      window.location = ($(that).attr('href'))
     .always ->
       $(that).css("cursor", "pointer")
 
