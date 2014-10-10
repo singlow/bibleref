@@ -9,10 +9,10 @@ patterns = {
   "Joshua": "Jos?(hua)?"
   "Judges": "Jud(ges)?"
   "Ruth": "Ru(th?)?"
-  "1 Samuel": "(1(st)|I) ?Sa(m(uel)?)?"
-  "2 Samuel": "(2(nd)|II) ?Sa(m(uel)?)?"
-  "1 Kings": "(1(st)|I)? ?Ki?(ngs)?"
-  "2 Kings": "(2(nd)|II)? ?Ki?(ngs)?"
+  "1 Samuel": "(1(st)?|I) ?Sa?(m(uel)?)?"
+  "2 Samuel": "(2(nd)?|II) ?Sa?(m(uel)?)?"
+  "1 Kings": "(1(st)?|I) ?Ki?(ngs)?"
+  "2 Kings": "(2(nd)?|II) ?Ki?(ngs)?"
   "1 Chronicles": "(1(st)?|I) ?Chr?(on(icles)?)?"
   "2 Chronicles": "(2(nd)?|II) ?Chr?(on(icles)?)?"
   "Ezra": "Ez(ra)?"
@@ -45,17 +45,17 @@ patterns = {
   "Luke": "(Luke|Lk|Lu)"
   "John": "(John|Jn)"
   "Acts": "(Acts|Ac|Act)"
-  "Romans": "Rom?(ans)?"
+  "Romans": "Ro(m(ans)?)?"
   "1 Corinthians": "(1(st)?|I) ?Cor(inthians)?"
   "2 Corinthians": "(2(nd)?|II) ?Cor(inthians)?"
   "Galatians": "Ga(l(atians)?)?"
-  "Ephesians": "Eph(esians)?"
-  "Philippians": "Phil(ippians)?"
+  "Ephesians": "Eph?(esians)?"
+  "Philippians": "Ph(il?)?(ippians)?"
   "Colossians": "Col(ossians)?"
-  "1 Thessalonians": "(1(st)?|I) ?Thess(alonians)?"
-  "2 Thessalonians": "(2(nd)?|II) ?Thess(alonians)?"
-  "1 Timothy": "(1(st)?|I) ?Tim(othy)?"
-  "2 Timothy": "(2(nd)?|II) ?Tim(othy)?"
+  "1 Thessalonians": "(1(st)?|I) ?Th(ess(alonians)?)?"
+  "2 Thessalonians": "(2(nd)?|II) ?Th(ess(alonians)?)?"
+  "1 Timothy": "(1(st)?|I) ?Ti(m(othy)?)?"
+  "2 Timothy": "(2(nd)?|II) ?Ti(m(othy)?)?"
   "Titus": "Tit(us)?"
   "Philemon": "(Philem(on)?|Phlm)"
   "Hebrews": "Heb(rews)?"
@@ -70,11 +70,10 @@ patterns = {
 }
 
 normalizeRef = (t)->
-  t = t.replace(RegExp(pat+"\\.?\\b"), name) for name, pat of patterns
-  t = t.replace(/;\s?$/, '')
+  t = t.replace(RegExp("\\b"+pat+"\\.?"), name) for name, pat of patterns
   return t
 
-allBooks = '(' + (pattern for book, pattern of patterns).join('|') + ')'
+allBooks = '(' + ("\\b"+pattern for book, pattern of patterns).join('|') + ')'
 allBooksRegEx = RegExp('('+allBooks+'\\.?\\s?([\\d-]+(:?([0-9]+(, ?[0-9]+)*)+)(; ?)?)+);?', 'gi')
 
 replacement = (match, p1, p2, p3)->
