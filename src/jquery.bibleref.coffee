@@ -79,7 +79,7 @@ allBooksRegEx = RegExp('('+allBooks+'\\.?\\s?([\\d-]+(:?([0-9]+(, ?[0-9]+)*)+)(;
 replacement = (match, p1, p2, p3)->
   stdname = normalizeRef(match)
   console.log match
-  return "<a target=\"_blank\" href=\"http://www.biblegateway.com/passage/?search=#{stdname}&version=nasb&interface=print\" data-bibleref=\"#{stdname}\">#{match}</a>"
+  return "<a target=\"_blank\" href=\"http://www.biblegateway.com/passage/?search=#{stdname}&interface=print\" data-bibleref=\"#{stdname}\">#{match}</a>"
 
 $(document).ready ->
 
