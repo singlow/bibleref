@@ -70,7 +70,7 @@ patterns = {
 }
 
 normalizeRef = (t)->
-  t = t.replace(RegExp("\\b"+pat+"\\.?"), name) for name, pat of patterns
+  t = t.replace(RegExp("\\b"+pat+"\\b\\.?"), name) for name, pat of patterns
   return t
 
 allBooks = '(' + ("\\b"+pattern for book, pattern of patterns).join('|') + ')'
