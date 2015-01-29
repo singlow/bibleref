@@ -28,7 +28,7 @@ patterns = {
   "Lamentations": "La(m(entations)?)?"
   "Ezekiel": "Ez(e(k(iel)?)?)?"
   "Daniel": "Da(n(iel)?)?"
-  "Hoseah": "Ho(s(ea)?)?"
+  "Hosea": "Ho(s(ea)?)?"
   "Joel": "(Joel|Jl)"
   "Amos": "Am(os)?"
   "Obadiah": "Ob(a(d(iah)?)?)?"
