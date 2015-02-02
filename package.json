@@ -1,6 +1,6 @@
 {
   "name": "jquery-bibleref",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discover and interact with bible references in web pages",
   "main": "jquery.bibleref.js",
   "scripts": {
